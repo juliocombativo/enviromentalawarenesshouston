@@ -29,6 +29,7 @@
 			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
 			document.getElementsByTagName( 'head' )[0].appendChild( link );
 		</script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 
 		<!--[if lt IE 9]>
 		<script src="lib/js/html5shiv.js"></script>
@@ -40,6 +41,7 @@
 		<div class="reveal">
 			<div class="slides">
 				<section>
+					<h2>My Story of Houston</h2>
 					<img src="img/downtown.jpg" />
 				</section>
 
@@ -94,6 +96,17 @@
 				  </ul>
 				</section>
 
+				<section data-transition="fade-out">
+				  	<div>
+						<iframe style="border:0px;scrolling:no;width:100%;height:530px" src="http://ss2.climatecentral.org/widget.html?utm_source=HoustonEnviromentalAwareness&utm_medium=embed&utm_campaign=SS2-Map#11/29.7021/-95.2501?show=satellite&level=1&pois=show&contentTitle=Nowadays%202015"></iframe>
+					</div>
+				  </section>
+				  <section data-transition="fade-in">
+				  	<div>
+				  		<iframe style="border:0px;scrolling:no;width:100%;height:530px" src="http://ss2.climatecentral.org/widget.html?utm_source=Houston&utm_medium=embed&utm_campaign=SS2-Map#11/29.7021/-95.2501?show=satellite&level=10&pois=show&contentTitle=10%20Feet%20Sea%20Level"></iframe>
+				  	</div>
+				  </section>
+				  
 				<section>
 				  <section>
 				  	<h2>Some changes and preparations are on their way:</h2>
@@ -129,7 +142,7 @@
 				</section>
 
 				<section>
-				  <section id="take_action">
+				  <section>
 				    <h3>Take Action!</h3>
 				    <p>Our comunity needs to drive the first steps to address this problems.</p>
 				  </section>
@@ -137,7 +150,9 @@
 				  	<h3>In yor everyday activities:</h3>
 				  	<ul>
 				  	  <li>Reuse / Reduce / Recycle</li>
-				  	  <li></li>
+				  	  <li><a href="#representative">Contact your Congressman</a></li>
+					  <li>Sign a Petition</li>
+					  <li>Send us your story</li>
 				  	</ul>
 				  </section>
 				  <section>
@@ -166,6 +181,42 @@
 					<h3>This is our only home, lets take care of it</h3>
 				</section>
 
+				<section id="representative">
+						<div>
+						Zip Code: <input id="zipcode"></input>
+</div> 
+<a href="#/representative" id="btnGet">Search my representative</a>
+<div id="representants">
+
+</div>
+<script type="text/javascript">
+    $("#btnGet").click(function () {
+		var zipCode = $("#zipcode").val()
+		console.log('ZipCode: ' + zipCode);	
+		$.get("https://congress.api.sunlightfoundation.com/legislators/locate", { zip: zipCode, apikey: "450543bfd922450b8fe8dc91114d5de7" })
+		.done(function( data ) {
+			$("#representantTable").remove();
+			var table = $('<table id="representantTable"></table>');
+			$.each(data.results, function (position, information) {
+				var row = $('<tr></tr>');
+				var rowDatafirst_name = $('<td></td>').text(information.first_name);
+				var rowDatalast_name = $('<td></td>').text(information.last_name);
+				var rowDataoc_email = $('<td></td>');
+				var emailto = $('<a href="mailto:' + information.oc_email + ' name="emailLink">' + information.oc_email + '</a>');
+				rowDataoc_email.append(emailto);
+				var rowDataphone = $('<td></td>').html('<nobr>' + information.phone + '</nobr>');
+                row.append(rowDatafirst_name);
+				row.append(rowDatalast_name);
+				row.append(rowDataoc_email);
+				row.append(rowDataphone);
+				table.append(row);
+			});
+			$("#representants").append(table);
+		});
+    });
+</script>
+				</section>
+				
 				<section id="themes">
 					<h2>Themes</h2>
 					<p>
@@ -212,6 +263,7 @@
 					{ src: 'plugin/notes/notes.js', async: true }
 				]
 			});
+
 		</script>
 
 	</body>
